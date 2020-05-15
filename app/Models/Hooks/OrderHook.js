@@ -1,7 +1,7 @@
 'use strict';
 
-const Mail = use('Mail');
-const Helpers = use('Helpers');
+const Kue = use('Kue');
+const Job = use('App/Jobs/NewOrderMail');
 
 const User = use('App/Models/User');
 const Sale = use('App/Models/Sale');
@@ -33,12 +33,7 @@ OrderHook.sendNewOrderMail = async (orderInstance) => {
     users.map(async (id) => {
       const { name, email } = await User.find(id);
 
-      await Mail.send(['emails.new_order'], { name, email }, (message) => {
-        message
-          .to(email)
-          .from('hello@biscoitxs.com.br', 'Equipe Biscoitxs')
-          .subject('Houve uma compra do seu produto');
-      });
+      Kue.dispatch(Job.key, { name, email }, { attempts: 3 });
     })
   );
 };
