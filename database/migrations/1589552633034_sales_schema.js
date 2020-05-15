@@ -27,7 +27,7 @@ class SalesSchema extends Schema {
       table.string('category').notNullable();
       table.float('value').notNullable();
       table.string('description').notNullable();
-      table.string('contact', 8);
+      table.string('contact', 11);
       table.timestamps();
     });
   }

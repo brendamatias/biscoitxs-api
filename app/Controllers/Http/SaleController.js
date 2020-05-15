@@ -1,93 +1,77 @@
-'use strict'
+'use strict';
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Sale = use('App/Models/Sale');
 
-/**
- * Resourceful controller for interacting with sales
- */
 class SaleController {
-  /**
-   * Show a list of all sales.
-   * GET sales
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index({ auth }) {
+    const sales = await Sale.query()
+      .where('user_id', auth.user.id)
+      .with('user')
+      .fetch();
+
+    return sales;
   }
 
-  /**
-   * Render a form to be used for creating a new sale.
-   * GET sales/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store({ request, auth }) {
+    const data = request.only([
+      'title',
+      'category',
+      'value',
+      'description',
+      'contact',
+      'address_id',
+    ]);
+
+    const sale = await Sale.create({ ...data, user_id: auth.user.id });
+
+    return sale;
   }
 
-  /**
-   * Create/save a new sale.
-   * POST sales
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show({ params }) {
+    const sale = await Sale.findOrFail(params.id);
+
+    await sale.load('user');
+    await sale.load('address');
+
+    return sale;
   }
 
-  /**
-   * Display a single sale.
-   * GET sales/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update({ params, request, response, auth }) {
+    const sale = await Sale.findOrFail(params.id);
+
+    if (sale.user_id !== auth.user.id) {
+      return response.status(401).send({
+        error: { message: 'Usuário não autorizado.' },
+      });
+    }
+
+    const data = request.only([
+      'title',
+      'category',
+      'value',
+      'description',
+      'contact',
+      'address_id',
+    ]);
+
+    sale.merge(data);
+
+    await sale.save();
+
+    return sale;
   }
 
-  /**
-   * Render a form to update an existing sale.
-   * GET sales/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy({ params, response, auth }) {
+    const sale = await Sale.findOrFail(params.id);
 
-  /**
-   * Update sale details.
-   * PUT or PATCH sales/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+    if (sale.user_id !== auth.user.id) {
+      return response.status(401).send({
+        error: { message: 'Usuário não autorizado.' },
+      });
+    }
 
-  /**
-   * Delete a sale with id.
-   * DELETE sales/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    await sale.delete();
   }
 }
 
-module.exports = SaleController
+module.exports = SaleController;

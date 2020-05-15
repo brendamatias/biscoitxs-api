@@ -32,8 +32,14 @@ class AddressController {
     return address;
   }
 
-  async update({ params, request }) {
+  async update({ params, request, response, auth }) {
     const address = await Address.findOrFail(params.id);
+
+    if (address.user_id !== auth.user.id) {
+      return response.status(401).send({
+        error: { message: 'Usuário não autorizado.' },
+      });
+    }
 
     const data = request.only([
       'address',

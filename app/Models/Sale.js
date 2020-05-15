@@ -3,7 +3,11 @@
 const Model = use('Model');
 
 class Sale extends Model {
-  addresses() {
+  user() {
+    return this.belongsTo('App/Models/User');
+  }
+
+  address() {
     return this.belongsTo('App/Models/Address');
   }
 
