@@ -1,5 +1,7 @@
 'use strict';
 
+const Database = use('Database');
+
 const Order = use('App/Models/Order');
 const Product = use('App/Models/Product');
 const Sale = use('App/Models/Sale');
@@ -17,10 +19,15 @@ class OrderController {
   }
 
   async store({ request, response, auth }) {
+    const trx = await Database.beginTransaction();
+
     const { status, products } = request.only(['status', 'products']);
     let total = 0;
 
-    const order = await Order.create({ user_id: auth.user.id, total, status });
+    const order = await Order.create(
+      { user_id: auth.user.id, total, status },
+      trx
+    );
 
     await Promise.all(
       products.map(async (product) => {
@@ -36,19 +43,24 @@ class OrderController {
 
         total += product.value;
 
-        await Product.create({
-          order_id: order.id,
-          sale_id: sale.id,
-          quantity: product.quantity,
-          unitary_value: sale.value,
-          total: product.value,
-        });
+        await Product.create(
+          {
+            order_id: order.id,
+            sale_id: sale.id,
+            quantity: product.quantity,
+            unitary_value: sale.value,
+            total: product.value,
+          },
+          trx
+        );
       })
     );
 
     order.merge({ total });
 
-    await order.save();
+    await order.save(trx);
+
+    await trx.commit();
 
     return order;
   }
