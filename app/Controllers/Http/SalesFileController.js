@@ -1,93 +1,85 @@
-'use strict'
+'use strict';
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Sale = use('App/Models/Sale');
+const File = use('App/Models/File');
+const SalesFile = use('App/Models/SalesFile');
 
-/**
- * Resourceful controller for interacting with salesfiles
- */
+const Helpers = use('Helpers');
+
 class SalesFileController {
-  /**
-   * Show a list of all salesfiles.
-   * GET salesfiles
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ params, request, response }) {
+    try {
+      const sale = await Sale.find(params.id);
+
+      if (!sale) {
+        return response.status(401).send({
+          error: { message: 'Anúncio não encontrado.' },
+        });
+      }
+
+      if (!request.file('file')) return;
+
+      const uploads = request.file('file', {
+        types: ['image'],
+        size: '2mb',
+      });
+
+      await uploads.moveAll(Helpers.tmpPath('uploads'), (upload) => ({
+        name: `${Date.now()}.${upload.subtype}`,
+      }));
+
+      if (!uploads.movedAll()) {
+        return uploads.errors();
+      }
+
+      await Promise.all(
+        uploads.movedList().map(async (image) => {
+          const file = await File.create({
+            file: image.fileName,
+            name: image.clientName,
+            type: image.type,
+            subtype: image.subtype,
+          });
+
+          await SalesFile.create({
+            file_id: file.id,
+            sale_id: sale.id,
+          });
+        })
+      );
+
+      await sale.load('images');
+
+      return sale;
+    } catch (err) {
+      return response.status(err.status).send({
+        error: { message: 'Erro no upload dos arquivos.' },
+      });
+    }
   }
 
-  /**
-   * Render a form to be used for creating a new salesfile.
-   * GET salesfiles/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
+  async show({ params, response }) {
+    try {
+      const sale = await Sale.find(params.id);
 
-  /**
-   * Create/save a new salesfile.
-   * POST salesfiles
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+      if (!sale) {
+        return response.status(401).send({
+          error: { message: 'Anúncio não encontrado.' },
+        });
+      }
 
-  /**
-   * Display a single salesfile.
-   * GET salesfiles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+      const images = await SalesFile.query()
+        .where('sale_id', params.id)
+        .with('file')
+        .fetch();
 
-  /**
-   * Render a form to update an existing salesfile.
-   * GET salesfiles/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update salesfile details.
-   * PUT or PATCH salesfiles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a salesfile with id.
-   * DELETE salesfiles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+      return images;
+    } catch (err) {
+      return response.status(err.status).send({
+        error: { message: 'Ops, erro interno.' },
+      });
+    }
   }
 }
 
-module.exports = SalesFileController
+module.exports = SalesFileController;

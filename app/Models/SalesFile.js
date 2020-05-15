@@ -3,12 +3,12 @@
 const Model = use('Model');
 
 class SalesFile extends Model {
-  sales() {
+  sale() {
     return this.belongsTo('App/Models/Sale');
   }
 
-  users() {
-    return this.belongsTo('App/Models/User');
+  file() {
+    return this.belongsTo('App/Models/File');
   }
 }
 

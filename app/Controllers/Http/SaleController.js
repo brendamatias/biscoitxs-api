@@ -27,13 +27,26 @@ class SaleController {
     return sale;
   }
 
-  async show({ params }) {
-    const sale = await Sale.findOrFail(params.id);
+  async show({ params, response }) {
+    try {
+      const sale = await Sale.find(params.id);
 
-    await sale.load('user');
-    await sale.load('address');
+      if (!sale) {
+        return response.status(401).send({
+          error: { message: 'Anúncio não encontrado.' },
+        });
+      }
 
-    return sale;
+      await sale.load('user');
+      await sale.load('address');
+      await sale.load('images');
+
+      return sale;
+    } catch (err) {
+      return response.status(err.status).send({
+        error: { message: 'Ops, erro interno.' },
+      });
+    }
   }
 
   async update({ params, request, response, auth }) {

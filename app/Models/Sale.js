@@ -11,8 +11,8 @@ class Sale extends Model {
     return this.belongsTo('App/Models/Address');
   }
 
-  salesfiles() {
-    return this.belongsToMany('App/Models/SalesFile');
+  images() {
+    return this.hasMany('App/Models/SalesFile');
   }
 }
 

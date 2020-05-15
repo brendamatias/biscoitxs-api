@@ -15,4 +15,7 @@ Route.group(() => {
 
   Route.resource('addresses', 'AddressController').apiOnly();
   Route.resource('sales', 'SaleController').apiOnly();
+
+  Route.get('sales/:id/files', 'SalesFileController.show');
+  Route.post('sales/:id/files', 'SalesFileController.store');
 }).middleware(['auth']);
