@@ -11,12 +11,18 @@
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
   "rules": {
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "prettier/prettier": ["error"],
+    "strict": "off",
     "class-methods-use-this": "off",
-    "strict": [0, "global"],
-    "consistent-return": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": ["warn", { "props": false }],
+    "func-names": ["warn", "as-needed"],
+    "no-use-before-define": ["warn", { "functions": true, "classes": true }],
+    "array-callback-return": "warn",
+    "no-multi-assign": "off"
   }
 }
