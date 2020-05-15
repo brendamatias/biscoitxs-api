@@ -1,28 +1,24 @@
 'use strict';
 
-class User {
+class ResetPassword {
   get validateAll() {
     return true;
   }
 
   get rules() {
     return {
-      name: 'required',
-      email: 'required|email|unique:users',
+      token: 'required',
       password: 'required|confirmed',
     };
   }
 
   get messages() {
     return {
-      'name.required': 'O nome é obrigatório.',
-      'email.required': 'O email é obrigatório.',
-      'email.email': 'Informe um email válido.',
-      'email.unique': 'Email já cadastrado.',
+      'token.required': 'O token é obrigatório.',
       'password.required': 'A senha é obrigatória.',
       'password.confirmed': 'A confirmação de senha é obrigatória.',
     };
   }
 }
 
-module.exports = User;
+module.exports = ResetPassword;

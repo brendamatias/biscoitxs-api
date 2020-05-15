@@ -21,8 +21,7 @@ class SalesSchema extends Schema {
         .references('id')
         .inTable('addresses')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
-        .notNullable();
+        .onDelete('SET NULL');
       table.string('title').notNullable();
       table.string('category').notNullable();
       table.float('value').notNullable();
