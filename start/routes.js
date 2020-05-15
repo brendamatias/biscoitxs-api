@@ -27,4 +27,8 @@ Route.group(() => {
 
   Route.get('sales/:id/files', 'SalesFileController.show');
   Route.post('sales/:id/files', 'SalesFileController.store');
+
+  Route.get('orders', 'OrderController.index');
+  Route.get('orders/:id', 'OrderController.show');
+  Route.post('orders', 'OrderController.store').validator('Order');
 }).middleware(['auth']);
