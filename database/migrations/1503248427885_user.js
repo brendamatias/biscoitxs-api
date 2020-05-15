@@ -11,6 +11,8 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique();
       table.string('password', 254).notNullable();
       table.boolean('provider').defaultTo(false);
+      table.string('gender');
+      table.string('sexual_option');
       table.string('token');
       table.timestamp('token_created_at');
       table.timestamps();
