@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class Session {
   get validateAll() {
     return true;
@@ -13,11 +15,7 @@ class Session {
   }
 
   get messages() {
-    return {
-      'email.required': 'O email é obrigatório.',
-      'email.email': 'Informe um email válido.',
-      'password.required': 'A senha é obrigatória.',
-    };
+    return Antl.list('validation');
   }
 }
 module.exports = Session;

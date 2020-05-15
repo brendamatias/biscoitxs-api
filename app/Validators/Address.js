@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class Address {
   get validateAll() {
     return true;
@@ -16,16 +18,7 @@ class Address {
   }
 
   get messages() {
-    return {
-      'address.required': 'O endereço é obrigatório.',
-      'neighborhood.required': 'O bairro é obrigatório.',
-      'number.required': 'O número é obrigatório.',
-      'state.required': 'O estado é obrigatório.',
-      'city.required': 'A cidade é obrigatório.',
-
-      'state.min': 'O estado deve conter no mínimo 2 caracteres.',
-      'state.max': 'O estado deve conter no máximo 2 caracteres.',
-    };
+    return Antl.list('validation');
   }
 }
 

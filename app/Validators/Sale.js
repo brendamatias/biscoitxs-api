@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class Sale {
   get validateAll() {
     return true;
@@ -17,16 +19,7 @@ class Sale {
   }
 
   get messages() {
-    return {
-      'title.required': 'O título é obrigatório.',
-      'category.required': 'A categoria é obrigatória.',
-      'value.required': 'O preço é obrigatório.',
-      'description.required': 'A descrição é obrigatória.',
-      'address_id.exists': 'Endereço não encontrado.',
-
-      'contact.min': 'O contato deve conter no mínimo 10 caracteres.',
-      'contact.max': 'O contato deve conter no máximo 11 caracteres.',
-    };
+    return Antl.list('validation');
   }
 }
 

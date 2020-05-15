@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class ResetPassword {
   get validateAll() {
     return true;
@@ -13,11 +15,7 @@ class ResetPassword {
   }
 
   get messages() {
-    return {
-      'token.required': 'O token é obrigatório.',
-      'password.required': 'A senha é obrigatória.',
-      'password.confirmed': 'A confirmação de senha é obrigatória.',
-    };
+    return Antl.list('validation');
   }
 }
 

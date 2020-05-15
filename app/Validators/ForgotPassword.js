@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class ForgotPassword {
   get validateAll() {
     return true;
@@ -13,12 +15,7 @@ class ForgotPassword {
   }
 
   get messages() {
-    return {
-      'email.required': 'O email é obrigatório.',
-      'email.email': 'Informe um email válido.',
-      'redirect_url.required': 'A url é obrigatória.',
-      'redirect_url.url': 'Informe uma url válida.',
-    };
+    return Antl.list('validation');
   }
 }
 

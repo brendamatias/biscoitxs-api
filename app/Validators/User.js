@@ -1,5 +1,7 @@
 'use strict';
 
+const Antl = use('Antl');
+
 class User {
   get validateAll() {
     return true;
@@ -14,14 +16,7 @@ class User {
   }
 
   get messages() {
-    return {
-      'name.required': 'O nome é obrigatório.',
-      'email.required': 'O email é obrigatório.',
-      'email.email': 'Informe um email válido.',
-      'email.unique': 'Email já cadastrado.',
-      'password.required': 'A senha é obrigatória.',
-      'password.confirmed': 'A confirmação de senha é obrigatória.',
-    };
+    return Antl.list('validation');
   }
 }
 
