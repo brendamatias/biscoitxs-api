@@ -1,6 +1,7 @@
 'use strict';
 
 const Antl = use('Antl');
+const OrderConfig = use('Config').get('order');
 
 class Order {
   get validateAll() {
@@ -9,7 +10,7 @@ class Order {
 
   get rules() {
     return {
-      status: 'required',
+      status: `required|in:${Object.keys(OrderConfig.status)}`,
       products: 'required|array',
     };
   }

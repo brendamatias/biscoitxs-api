@@ -1,6 +1,7 @@
 'use strict';
 
 const Antl = use('Antl');
+const AuthConfig = use('Config').get('auth');
 
 class User {
   get validateAll() {
@@ -12,6 +13,10 @@ class User {
       name: 'required',
       email: 'required|email|unique:users',
       password: 'required|confirmed',
+      sexual_orientation: `required|in:${Object.keys(
+        AuthConfig.sexual_orientation
+      )}`,
+      gender: `required|in:${Object.keys(AuthConfig.gender)}`,
     };
   }
 
