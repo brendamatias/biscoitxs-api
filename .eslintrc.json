@@ -23,6 +23,7 @@
     "func-names": ["warn", "as-needed"],
     "no-use-before-define": ["warn", { "functions": true, "classes": true }],
     "array-callback-return": "warn",
-    "no-multi-assign": "off"
+    "no-multi-assign": "off",
+    "consistent-return": "off"
   }
 }

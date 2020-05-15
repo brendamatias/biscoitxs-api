@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 /** @type {import('@adonisjs/framework/src/Env')} */
-const Env = use('Env')
+const Env = use('Env');
 
 module.exports = {
   /*
@@ -20,7 +20,7 @@ module.exports = {
   /*
   |--------------------------------------------------------------------------
   | Cookie Name
-  |--------------------------------------------------------------------------
+  |------------------------------------ --------------------------------------
   |
   | The name of the cookie to be used for saving session id. Session ids
   | are signed and encrypted.
@@ -66,7 +66,7 @@ module.exports = {
   cookie: {
     httpOnly: true,
     sameSite: false,
-    path: '/'
+    path: '/',
   },
 
   /*
@@ -79,7 +79,7 @@ module.exports = {
   |
   */
   file: {
-    location: 'sessions'
+    location: 'sessions',
   },
 
   /*
@@ -96,6 +96,6 @@ module.exports = {
     port: 6379,
     password: null,
     db: 0,
-    keyPrefix: ''
-  }
-}
+    keyPrefix: '',
+  },
+};
