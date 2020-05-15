@@ -32,7 +32,8 @@
     "@adonisjs/validator": "^5.0.6",
     "adonis-kue": "^5.0.1",
     "moment": "^2.25.3",
-    "pg": "^8.2.0"
+    "pg": "^8.2.0",
+    "raven": "^2.6.4"
   },
   "devDependencies": {
     "eslint": "^7.0.0",
