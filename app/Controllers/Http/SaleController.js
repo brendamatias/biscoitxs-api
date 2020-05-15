@@ -3,11 +3,10 @@
 const Sale = use('App/Models/Sale');
 
 class SaleController {
-  async index({ auth }) {
-    const sales = await Sale.query()
-      .where('user_id', auth.user.id)
-      .with('user')
-      .fetch();
+  async index({ request }) {
+    const { page } = request.get();
+
+    const sales = await Sale.query().with('user').paginate(page);
 
     return sales;
   }
