@@ -67,7 +67,7 @@ Time de pessoas maravilhosa ([emoji key](https://allcontributors.org/docs/en/emo
         <sub><b>Brenda Matias</b></sub>
       </a>
       <br />
-      <a href="https://github.com/brendamatias"title="Content">💻</a>
+      <a href="https://github.com/brendamatias"title="Code">💻</a>
     </td>
     <td align="center">
       <a href="https://www.linkedin.com/in/fabiana-barros-e-silva-3317281a4">
